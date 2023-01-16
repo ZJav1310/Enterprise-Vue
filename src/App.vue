@@ -1,23 +1,30 @@
 <template>
-  <!-- updating correctly -->
+   <div v-if="showAdd">
+      <ModalComponent>
+        <FormComponent 
+        @form-object="addFilm" 
+        formText = "Add Film"
+        />
+      </ModalComponent>
+      
+    </div>
+    
+    <div v-if="showUpdate">
+      <ModalComponent>
+        <FormComponent 
+        @form-object="updateFilm"
+        formText = "Update Film"
+        />
+    </ModalComponent>
+    </div>
+
   <div class="container">
     <Header 
     @toggle-insert="toggleInsert"
     title = 'Film' 
     :showAdd = "showAdd"
     />
-    <div v-if="showAdd">
-      <FormComponent 
-      @form-object="addFilm" 
-      formText = "Add Film"
-      />
-    </div>
-    <div v-if="showUpdate">
-      <FormComponent 
-      @form-object="updateFilm" 
-      formText = "Update Film"
-      />
-    </div>
+
     <Films 
       @update-film="toggleUpdate" 
       @delete-film="deleteFilm" 
@@ -30,20 +37,24 @@
 import Header from "./components/HeaderMain.vue";
 import Films from "./components/FilmsComponent.vue";
 import FormComponent from "./components/FormComponent.vue";
+import ModalComponent from "./components/ModalComponent.vue";
 
 export default {
   name: 'App',
   components: {
     Header,
     Films,
-    FormComponent
-  },
+    FormComponent,
+    ModalComponent
+},
    data () {
     return {
       films: [],
       showAdd : false,
       showUpdate: false,
+      showModal: false,
       formText : '',
+      id: ''
     }
    },
    async created(){
@@ -52,17 +63,21 @@ export default {
    methods: {
     toggleInsert(){
       this.showAdd = !this.showAdd
+      this.id = ''
       if(this.showUpdate == true){
         this.showUpdate = false;
       }
     },
-    toggleUpdate(){
+    toggleUpdate(id){
       this.showUpdate = !this.showUpdate
+      this.id = id
       if(this.showAdd == true){
         this.showAdd = false;
       }
+      console.log(id)
     },
     async deleteFilm(id){
+      console.log(id)
       if(confirm('Are you sure?')){
         const response = await fetch(`api/films/${id}`, {
         method: 'DELETE',
@@ -74,11 +89,17 @@ export default {
             
       }
     },
-    async updateFilm(id){
-      console.log("Film id:", id);
-      // const filmToUpdate = await this.fetchFilm(id);
-      // const updatedFilm = {...filmToUpdate, }
-     
+    async updateFilm(film){
+      const response = await fetch(`api/films/${this.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(film)
+      })
+      const data = await response.json()
+      this.films = this.films.filter((film) => film.id !== this.id)
+      response.status === 200 ? (this.films = [...this.films, data]) : alert('Error Adding Film')      
     },
     async addFilm(film){
       const response = await fetch('api/films', {
@@ -90,8 +111,8 @@ export default {
       })
 
       const data = await response.json()
-      response.status === 200 ? (this.films = [...this.films, data]) : alert('Error Adding Film')
-    
+      response.status === 201 ? (this.films = [...this.films, data]) : alert('Error Adding Film')
+  
     },
     async fetchFilms() {
       const response = await fetch('api/films')
