@@ -1,4 +1,5 @@
 <template>
+  <!-- updating correctly -->
   <div class="container">
     <Header 
     @toggle-insert="toggleInsert"
