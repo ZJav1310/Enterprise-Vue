@@ -1,0 +1,36 @@
+{
+  "films": [
+    {
+      "id": 1231,
+      "title": "Sometqwqhinga",
+      "year": 1,
+      "director": "me",
+      "stars": "stars",
+      "review": "reviewsssa"
+    },
+    {
+      "id": 444,
+      "title": "Somethwwwwwwinga",
+      "year": 1,
+      "director": "me",
+      "stars": "stars",
+      "review": "reviewsssa"
+    },
+    {
+      "id": 33,
+      "title": "Sometsssssshinga",
+      "year": 1,
+      "director": "me",
+      "stars": "stars",
+      "review": "reviewsssa"
+    },
+    {
+      "id": 238,
+      "title": "sada",
+      "year": "dsgsdgf",
+      "director": "asdasgd",
+      "stars": "dsfaf",
+      "review": "dsgsdfg"
+    }
+  ]
+}
