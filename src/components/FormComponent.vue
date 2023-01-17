@@ -47,7 +47,8 @@ import ButtonComponent from './ButtonComponent.vue';
 export default {
     name: "FormComponent",
     props: {
-        formText: String
+        formText: String,
+        incomingFilm : Object
     },
     data() {
         return {

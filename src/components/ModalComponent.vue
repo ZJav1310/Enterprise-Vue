@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-content" v-if="modalOpen">
-    <div class="modal modal-sheet position-static d-block py-5" tabindex="-1" role="dialog" id="modalSheet">
+  <!-- <div class="modal-content" v-if="modalOpen"> -->
+    <!-- <div class="modal modal-sheet position-static d-block py-5" tabindex="-1" role="dialog" id="modalSheet" ref="modal"> -->
       <div class="modal-dialog" role="document">
         <div class="modal-content rounded-4 shadow">
           <div class="modal-header border-bottom-0">
@@ -13,22 +13,20 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
+
 </template>
 
 <script>
 export default {
   name: "Modal",
-  data() {
-    return {
-      modalOpen: true,
-    }
+  props:{
+    modalId : String
   },
   methods: {
     onClick() {
-      this.modalOpen = false
-      this.$emit('toggle-modal')
+      this.$emit('close-modal')
     }
   }
 }

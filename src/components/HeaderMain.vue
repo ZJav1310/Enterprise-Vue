@@ -52,7 +52,8 @@
                 </form>
                 <div class="col-md-3 text-end">
                     <!-- <button type="button" class="btn btn-primary">Add Film</button> -->
-                    <ButtonComponent class="btn btn-primary" @click-btn="$emit('toggle-insert')" text="Add Film" />
+                    <ButtonComponent class="btn btn-primary " @click-btn="$emit('toggle-insert')" text="Add Film"
+                        data-toggle="modal" data-target="#modalComp" />
                 </div>
             </div>
         </div>
