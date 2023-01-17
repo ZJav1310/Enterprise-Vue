@@ -99,7 +99,7 @@ export default {
       })
       const data = await response.json()
       this.films = this.films.filter((film) => film.id !== this.id)
-      response.status === 200 ? (this.films = [...this.films, data]) : alert('Error Adding Film')      
+      response.status === 200 ? (this.films = [...this.films, data]) : alert('Error Adding Film') 
     },
     async addFilm(film){
       const response = await fetch('api/films', {
