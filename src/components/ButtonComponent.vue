@@ -3,17 +3,17 @@
 </template>
 
 <script>
-    export default {
-        name: 'ButtonComponent',
-        props: {
-           text: String,
-           color: String,
+export default {
+    name: 'ButtonComponent',
+    props: {
+        text: String,
+        color: String,
+    },
+    methods: {
+        onClick() {
+            console.log("Clicked", this.text);
+            this.$emit('click-btn')
         },
-        methods: {
-            onClick() {
-                console.log("Clicked", this.text);
-                this.$emit('click-btn')
-            },
-        },
-    }
+    },
+}
 </script>

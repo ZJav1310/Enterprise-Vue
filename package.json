@@ -9,6 +9,9 @@
     "backend": "json-server --watch db.json --port 5000"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.3",
+    "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
     "json-server": "^0.17.1",
     "vue": "^3.2.13"
