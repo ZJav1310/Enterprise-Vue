@@ -5,6 +5,7 @@
 <script>
 export default {
     name: 'ButtonComponent',
+    emits:['click-btn'],
     props: {
         text: String,
         color: String,

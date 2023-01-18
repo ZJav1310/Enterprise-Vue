@@ -40,31 +40,33 @@
                     <img src="../assets/film-svgrepo-com.png" alt="..." height="36">
                 </a>
                 <ul class="dropdown-menu text-small shadow">
-                    <li><a class="dropdown-item" @click="onClick('JSON')" href="#">JSON</a></li>
-                    <li><a class="dropdown-item" @click="onClick('XML')" href="#">XML</a></li>
-                    <li><a class="dropdown-item" @click="onClick('TEXT')" href="#">TEXT</a></li>
+                    <li><a class="dropdown-item" @click="onClickFormat('JSON')" href="#">JSON</a></li>
+                    <li><a class="dropdown-item" @click="onClickFormat('XML')" href="#">XML</a></li>
+                    <li><a class="dropdown-item" @click="onClickFormat('TEXT')" href="#">TEXT</a></li>
                 </ul>
             </div>
 
             <div class="d-flex align-items-center">
                 <form class="w-100 me-3" role="search">
-                    <input type="text" 
-                        class="form-control" placeholder="Search..." aria-label="Search">
+                    <div>
+                        <input placeholder="Search title.." class="form-control" type="text" v-model="searchText" @input="onSearch(searchText)" />
+                    </div>
                 </form>
+                <!-- {{ searchText }} -->
+
                 <div class="col-md-3 text-end">
                     <!-- <button type="button" class="btn btn-primary">Add Film</button> -->
                     <ButtonComponent class="btn btn-primary " @click-btn="$emit('toggle-insert')" text="Add Film"
                         data-toggle="modal" data-target="#modalComp" />
                 </div>
             </div>
+
         </div>
     </header>
-
 </template>
 
 <script>
 import ButtonComponent from './ButtonComponent.vue';
-
 export default {
     name: "HeaderMain",
     props: {
@@ -72,17 +74,29 @@ export default {
         showAdd: Boolean,
         format: String,
     },
+    data(){
+        return {
+            searchText : ''
+        }
+    },
     components: { ButtonComponent },
-    emits: ['toggle-insert'],
+    emits: ['toggle-insert', 'request-format', 'search-bar'],
+    // Mount() allows us to use the bootstrap js bundle which is required for the dropdown & modal.
+    //TODO: Sometimes it needs to be refreshed to work -> Is this an issue with the below or something else?
     mounted() {
         let bootstrapScript = document.createElement('script')
         bootstrapScript.setAttribute('src', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js')
         document.head.appendChild(bootstrapScript)
     },
     methods: {
-        onClick(input) {
+        onClickFormat(input) {
             console.log(input)
             this.$emit['requested-format', input]
+        },
+        onSearch(search) {
+            this.$emit['search-bar', search]
+            console.log("search-bar", search)
+            // console.log("search-text1", this.searchText)
         }
     }
 }

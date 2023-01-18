@@ -1,17 +1,22 @@
 <template>
 
-  <div class="search-wrapper">
+  <!-- <div class="search-wrapper">
     <input type="text" v-model="search" placeholder="Search title.." />
     <label>Search title:</label>
   </div>
-  {{ search }}
+  {{ search }} -->
+
+{{ search }}
   <div class="container">
-    <Header @requested-format="requestedFormat" @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" />
+    <Header @toggle-insert="toggleInsert" @search-bar="setSearch" title='Film'
+      :showAdd="showAdd" />
+    <div>{{ search }}</div>
     <div>
-      <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="films" @click="showModal = true" />
+      <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
     </div>
   </div>
 
+  <!-- Modal that will contain the form, this can be changed to a component -->
   <div v-if="showModal">
     <!-- Modal for forms -->
     <div class="modal fade" id="modalComp" tabindex="-1" role="dialog" aria-labelledby="modalCompLabel"
@@ -46,18 +51,14 @@
 import Header from "./components/HeaderMain.vue";
 import Films from "./components/FilmsComponent.vue";
 import FormComponent from "./components/FormComponent.vue";
-// import ButtonComponent from "./components/ButtonComponent.vue";
-
 export default {
   name: 'App',
   components: {
     Header,
     Films,
     FormComponent,
-    // ButtonComponent
   },
-  emits: ['showAdd', 'films',],
-
+  // emits: ['showAdd', 'films',],
   data() {
     return {
       films: [],
@@ -67,6 +68,7 @@ export default {
       formText: '',
       id: '',
       incFilm: String,
+      // searchText: '',
       search: ''
     }
   },
@@ -74,18 +76,11 @@ export default {
     this.films = await this.fetchFilms()
   },
   computed: {
-    // filterList() {
-    //   return this.films.filter((film) => { return film.title.toLowerCase().includes(this.search.toLowerCase()) })
-
-    //   // return this.films.filter((film) => film.title.toLowerCase().includes(input.toLowerCase()))
-    // },
-    computed: {
-      filteredList() {
-        return this.films.filter(film => {
-          return film.title.toLowerCase().includes(this.search.toLowerCase())
-        })
-      }
-    }
+    filteredList() {
+      return this.films.filter(film => {
+        return film.title.toLowerCase().includes(this.search.toLowerCase())
+      })
+    },
   },
   methods: {
     requestedFormat(format) {
@@ -100,7 +95,6 @@ export default {
       this.showUpdate = false
       this.showAdd = true
       this.id = ''
-
     },
     toggleUpdate(id) {
       this.incFilm = null
@@ -175,6 +169,10 @@ export default {
     getFilm(id) {
       return this.films.find(film => film.id == id)
     },
+    setSearch(input) {
+      console.log("doing")
+      console.log("searchSet main", input)
+    }
   }
 }
 </script>
