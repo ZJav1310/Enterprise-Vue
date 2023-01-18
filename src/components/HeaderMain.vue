@@ -49,7 +49,7 @@
             <div class="d-flex align-items-center">
                 <form class="w-100 me-3" role="search">
                     <div>
-                        <input placeholder="Search title.." class="form-control" type="text" v-model="searchText" @input="onSearch(searchText)" />
+                        <input placeholder="Search title.." class="form-control" type="text" :value="searchBar" @input="$emit('update:searchBar', $event.target.value)"/>
                     </div>
                 </form>
                 <!-- {{ searchText }} -->
@@ -73,14 +73,10 @@ export default {
         title: String,
         showAdd: Boolean,
         format: String,
-    },
-    data(){
-        return {
-            searchText : ''
-        }
+        searchBar: String
     },
     components: { ButtonComponent },
-    emits: ['toggle-insert', 'request-format', 'search-bar'],
+    emits: ['toggle-insert', 'request-format', 'update:searchBar'],
     // Mount() allows us to use the bootstrap js bundle which is required for the dropdown & modal.
     //TODO: Sometimes it needs to be refreshed to work -> Is this an issue with the below or something else?
     mounted() {
@@ -93,11 +89,6 @@ export default {
             console.log(input)
             this.$emit['requested-format', input]
         },
-        onSearch(search) {
-            this.$emit['search-bar', search]
-            console.log("search-bar", search)
-            // console.log("search-text1", this.searchText)
-        }
     }
 }
 </script>

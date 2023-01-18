@@ -1,21 +1,10 @@
 <template>
-
-  <!-- <div class="search-wrapper">
-    <input type="text" v-model="search" placeholder="Search title.." />
-    <label>Search title:</label>
-  </div>
-  {{ search }} -->
-
-{{ search }}
   <div class="container">
-    <Header @toggle-insert="toggleInsert" @search-bar="setSearch" title='Film'
-      :showAdd="showAdd" />
-    <div>{{ search }}</div>
+    <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search"/>
     <div>
       <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
     </div>
   </div>
-
   <!-- Modal that will contain the form, this can be changed to a component -->
   <div v-if="showModal">
     <!-- Modal for forms -->
@@ -58,7 +47,6 @@ export default {
     Films,
     FormComponent,
   },
-  // emits: ['showAdd', 'films',],
   data() {
     return {
       films: [],
@@ -68,7 +56,6 @@ export default {
       formText: '',
       id: '',
       incFilm: String,
-      // searchText: '',
       search: ''
     }
   },
@@ -169,10 +156,6 @@ export default {
     getFilm(id) {
       return this.films.find(film => film.id == id)
     },
-    setSearch(input) {
-      console.log("doing")
-      console.log("searchSet main", input)
-    }
   }
 }
 </script>
