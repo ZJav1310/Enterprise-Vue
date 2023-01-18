@@ -1,7 +1,7 @@
 <template>
 
     <h3>{{ formText }}</h3>
-
+    <h5>{{ message }}</h5>
     <form @submit="onSubmit">
         <div class="form-row">
             <div class="col-md-4 mb-3 w-100">
@@ -39,7 +39,6 @@
             <ButtonComponent class="btn btn-lg btn-primary w-100 mx-0 mb-3 mt-4" text="Save Changes" />
         </div>
     </form>
-
 </template>
 
 <script>
@@ -48,17 +47,28 @@ export default {
     name: "FormComponent",
     props: {
         formText: String,
-        incomingFilm : Object
+        idtag: String,
+        incFilm: Object,
+        message: String
     },
     data() {
-        return {
-            title: "",
-            director: "",
-            year: "",
-            stars: "",
-            review: "",
-            text: this.buttonText
-        };
+        if (this.incFilm == null) {
+            return {
+                title: "",
+                director: "",
+                year: "",
+                stars: "",
+                review: "",
+            }
+        } else {
+            return {
+                title: this.incFilm.title,
+                director: this.incFilm.director,
+                year: this.incFilm.year,
+                stars: this.incFilm.stars,
+                review: this.incFilm.review,
+            }
+        }
     },
     emits: ["film-object"],
     methods: {
@@ -75,7 +85,6 @@ export default {
                 director: this.director,
                 stars: this.stars,
                 review: this.review,
-                text: this.text
             };
 
             this.$emit("form-object", formObject);

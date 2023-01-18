@@ -48,7 +48,8 @@
 
             <div class="d-flex align-items-center">
                 <form class="w-100 me-3" role="search">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                    <input type="text" 
+                        class="form-control" placeholder="Search..." aria-label="Search">
                 </form>
                 <div class="col-md-3 text-end">
                     <!-- <button type="button" class="btn btn-primary">Add Film</button> -->
@@ -68,10 +69,11 @@ export default {
     name: "HeaderMain",
     props: {
         title: String,
-        showAdd: Boolean
+        showAdd: Boolean,
+        format: String,
     },
     components: { ButtonComponent },
-    emit: ['toggle-insert'],
+    emits: ['toggle-insert'],
     mounted() {
         let bootstrapScript = document.createElement('script')
         bootstrapScript.setAttribute('src', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js')

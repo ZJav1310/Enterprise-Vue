@@ -1,42 +1,39 @@
 <template>
-  <!-- <div v-if="showAdd">
-    <ModalComponent>
-      <FormComponent @form-object="addFilm" formText="Add Film" />
-    </ModalComponent>
-  </div> -->
-  <!-- <div v-if="showModal" aria-hidden="true">
-    <ModalComponent @close-modal="toggleModal">
-      <div v-if="showUpdate">
-        <FormComponent @form-object="updateFilm" formText="Update Film" />
-      </div>
-      <div v-if="showAdd">
-        <FormComponent @form-object="addFilm" formText="Add Film" />
-      </div>
-    </ModalComponent>
-  </div> -->
+
+  <div class="search-wrapper">
+    <input type="text" v-model="search" placeholder="Search title.." />
+    <label>Search title:</label>
+  </div>
+  {{ search }}
   <div class="container">
     <Header @requested-format="requestedFormat" @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" />
-    <Films @update-film="toggleUpdate" @delete-film="deleteFilm" :films="films" />
+    <div>
+      <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="films" @click="showModal = true" />
+    </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="modalComp" tabindex="-1" role="dialog" aria-labelledby="modalCompLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalComp
-      Label">xxx</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div v-if="showUpdate">
-            <FormComponent @form-object="updateFilm" formText="Update Film" />
+  <div v-if="showModal">
+    <!-- Modal for forms -->
+    <div class="modal fade" id="modalComp" tabindex="-1" role="dialog" aria-labelledby="modalCompLabel"
+      aria-hidden="true" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCompLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showModal = false">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div v-if="showAdd">
-            <FormComponent @form-object="addFilm" formText="Add Film" />
+          <div class="modal-body">
+            <div v-if="showModal">
+              <div v-if="showUpdate">
+                <FormComponent @form-object="updateFilm" formText="Update Film" :idtag="this.id"
+                  :incFilm="this.incFilm" />
+              </div>
+              <div v-if="showAdd">
+                <FormComponent @form-object="addFilm" formText="Add Film" :incFilm="null" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -49,7 +46,7 @@
 import Header from "./components/HeaderMain.vue";
 import Films from "./components/FilmsComponent.vue";
 import FormComponent from "./components/FormComponent.vue";
-// import ModalComponent from "./components/ModalComponent.vue";
+// import ButtonComponent from "./components/ButtonComponent.vue";
 
 export default {
   name: 'App',
@@ -57,20 +54,38 @@ export default {
     Header,
     Films,
     FormComponent,
-    // ModalComponent,
+    // ButtonComponent
   },
+  emits: ['showAdd', 'films',],
+
   data() {
     return {
       films: [],
       showAdd: false,
       showUpdate: false,
-      showModal: false,
+      showModal: true,
       formText: '',
-      id: ''
+      id: '',
+      incFilm: String,
+      search: ''
     }
   },
   async created() {
     this.films = await this.fetchFilms()
+  },
+  computed: {
+    // filterList() {
+    //   return this.films.filter((film) => { return film.title.toLowerCase().includes(this.search.toLowerCase()) })
+
+    //   // return this.films.filter((film) => film.title.toLowerCase().includes(input.toLowerCase()))
+    // },
+    computed: {
+      filteredList() {
+        return this.films.filter(film => {
+          return film.title.toLowerCase().includes(this.search.toLowerCase())
+        })
+      }
+    }
   },
   methods: {
     requestedFormat(format) {
@@ -80,21 +95,22 @@ export default {
       this.showModal = !this.showModal
     },
     toggleInsert() {
-      this.toggleModal();
+      this.incFilm = null
+      this.showModal = true
+      this.showUpdate = false
       this.showAdd = true
       this.id = ''
-      if (this.showUpdate == true) {
-        this.showUpdate = false;
-      }
+
     },
     toggleUpdate(id) {
-      this.toggleModal();
+      this.incFilm = null
       this.showUpdate = true
+      this.showAdd = false
+      this.showModal = true
       this.id = id
-      if (this.showAdd == true) {
-        this.showAdd = false;
-      }
-      console.log(id)
+      this.incFilm = this.getFilm(this.id)
+      console.log(this.id)
+      console.log("incoming film in toggleUpdate:", this.incFilm)
     },
     async deleteFilm(id) {
       console.log(id)
@@ -118,17 +134,18 @@ export default {
         body: JSON.stringify(film)
       })
       const data = await response.json()
-      // this.films = this.films.filter((film) => film.id !== this.id)
-      // response.status === 200 ? (this.films = [...this.films, data]) : alert('Error Adding Film')
       if (response.status === 200) {
         this.films = this.films.filter((film) => film.id !== this.id)
         this.films = [...this.films, data]
-        this.toggleModal()
+        console.log("Updated film in UpdateFilm:", film)
+
+        // this.incFilm = null
       } else {
         alert('Error Adding Film')
       }
     },
     async addFilm(film) {
+      console.log("addFilm:", film)
       const response = await fetch('api/films', {
         method: 'POST',
         headers: {
@@ -138,11 +155,8 @@ export default {
       })
 
       const data = await response.json()
-      // response.status === 201 ? (this.films = [...this.films, data]) : alert('Error Adding Film')
-      // this.toggleModal()
       if (response.status === 201) {
         this.films = [...this.films, data]
-        this.toggleModal()
       } else {
         alert('Error Adding Film')
       }
@@ -151,15 +165,16 @@ export default {
     async fetchFilms() {
       const response = await fetch('api/films')
       const data = await response.json()
-
       return data
     },
     async fetchFilm(id) {
       const response = await fetch(`api/films/${id}`)
       const data = await response.json()
-
       return data
-    }
+    },
+    getFilm(id) {
+      return this.films.find(film => film.id == id)
+    },
   }
 }
 </script>

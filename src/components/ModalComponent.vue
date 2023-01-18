@@ -1,6 +1,7 @@
 <template>
-  <!-- <div class="modal-content" v-if="modalOpen"> -->
-    <!-- <div class="modal modal-sheet position-static d-block py-5" tabindex="-1" role="dialog" id="modalSheet" ref="modal"> -->
+  <div class="modal" >
+  <div class="modal-content">
+    <div class="modal modal-sheet position-static d-block py-5" tabindex="-1" role="dialog" id="modalSheet" ref="modal">
       <div class="modal-dialog" role="document">
         <div class="modal-content rounded-4 shadow">
           <div class="modal-header border-bottom-0">
@@ -9,12 +10,13 @@
               aria-label="Close"></button>
           </div>
           <div class="modal-body py-0">
-            <slot></slot>
+            HELLO
           </div>
         </div>
       </div>
-    <!-- </div> -->
-  <!-- </div> -->
+    </div>
+  </div>
+  </div>
 
 </template>
 

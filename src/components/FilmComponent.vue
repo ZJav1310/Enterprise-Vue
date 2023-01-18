@@ -3,8 +3,10 @@
         <h3>{{ film.title }}</h3>
         <p>{{ film.year }} / {{ film.director }} / {{ film.stars }}</p>
         <p>{{ film.review }}</p>
-        <ButtonComponent @click="onUpdate(film.id)" text="Update" data-toggle="modal" data-target="#modalComp"/>
-        <ButtonComponent @click="onDelete(film.id)" text="Delete" />
+        <div>
+            <ButtonComponent @click="onUpdate(film.id)" text="Update" data-toggle="modal" data-target="#modalComp"/>
+            <ButtonComponent @click="onDelete(film.id)" text="Delete" />
+        </div>
     </div>
 </template>
 
@@ -15,9 +17,10 @@ export default {
     props: {
         film: Object
     },
+    emits: ['toggle-update', 'delete-film'],
     methods: {
         onUpdate(id) {
-            this.$emit('update-film', id);
+            this.$emit('toggle-update', id);
         },
         onDelete(id) {
             this.$emit('delete-film', id);
