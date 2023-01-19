@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      promisedItems: [],
       films: [],
       showAdd: false,
       showUpdate: false,
@@ -56,18 +57,35 @@ export default {
       formText: '',
       id: '',
       incFilm: String,
-      search: ''
+      search: '',
     }
   },
   async created() {
     this.films = await this.fetchFilms()
   },
+  // TODO:  This does not handle if I add a new record since issues with waiting for the item from API
+  //        Instead of using fetch and await on its own, I could await into variable? once that is done
+  //        then do whatever it is needing to be done? have an array of promised items and then an array
+  //        of completed items.
   computed: {
     filteredList() {
       return this.films.filter(film => {
         return film.title.toLowerCase().includes(this.search.toLowerCase())
       })
     },
+  },
+  // watch: {
+  //   search(newSearch) {
+  //     console.log("new search:", newSearch)
+  //     this.filter = this.films.filter(film => {
+  //       return film.title.toLowerCase().includes(newSearch.toLowerCase())
+  //     })
+
+  //     console.log(this.filter)
+  //   },
+  // }, 
+  mounted(){
+    this.fetchFilms()
   },
   methods: {
     requestedFormat(format) {
@@ -90,13 +108,14 @@ export default {
       this.showModal = true
       this.id = id
       this.incFilm = this.getFilm(this.id)
+
       console.log(this.id)
       console.log("incoming film in toggleUpdate:", this.incFilm)
     },
     async deleteFilm(id) {
       console.log(id)
       if (confirm('Are you sure?')) {
-        const response = await fetch(`api/films/${id}`, {
+        const response = await fetch(`/FilmAPIServlet?id=${id}`, {
           method: 'DELETE',
         })
 
@@ -107,7 +126,7 @@ export default {
       }
     },
     async updateFilm(film) {
-      const response = await fetch(`api/films/${this.id}`, {
+      const response = await fetch(`/FilmAPIServlet`, {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
@@ -127,7 +146,7 @@ export default {
     },
     async addFilm(film) {
       console.log("addFilm:", film)
-      const response = await fetch('api/films', {
+      const response = await fetch('/FilmAPIServlet', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -136,6 +155,7 @@ export default {
       })
 
       const data = await response.json()
+      
       if (response.status === 201) {
         this.films = [...this.films, data]
       } else {
@@ -144,12 +164,12 @@ export default {
 
     },
     async fetchFilms() {
-      const response = await fetch('api/films')
+      const response = await fetch(`/FilmAPIServlet`)
       const data = await response.json()
       return data
     },
     async fetchFilm(id) {
-      const response = await fetch(`api/films/${id}`)
+      const response = await fetch(`/FilmAPIServlet?id=${id}`)
       const data = await response.json()
       return data
     },

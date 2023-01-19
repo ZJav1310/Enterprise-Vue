@@ -5,12 +5,13 @@ module.exports = defineConfig({
 module.exports = {
   devServer: {
       proxy: {
-          '^/api': {
-              target: 'http://localhost:5000',
-              changeOrigin: true,
-              logLevel: 'debug',
-              pathRewrite: { '^/api': '/'},
-          }
-      }
-  }
-}
+        '^/FilmAPIServlet': {
+          target: 'http://localhost:8081',
+          changeOrigin: true,
+          secure:false,
+          pathRewrite: {'^/FilmAPIServlet': '/enterprise_api_war_exploded/FilmAPIServlet'},
+          logLevel: 'debug' 
+      },
+      },
+  },
+};
