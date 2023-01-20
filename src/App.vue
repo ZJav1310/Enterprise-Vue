@@ -43,7 +43,7 @@ import Header from "./components/HeaderMain.vue";
 import Films from "./components/FilmsComponent.vue";
 import FormComponent from "./components/FormComponent.vue";
 
-// const { XMLParser, XMLBuilder } = require("fast-xml-parser");
+const { XMLParser, /*XMLBuilder*/ } = require("fast-xml-parser");
 
 export default {
   name: 'App',
@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      promisedItems: [],
+      // promisedItems: [],
       films: [],
       showAdd: false,
       showUpdate: false,
@@ -63,7 +63,7 @@ export default {
       id: '',
       incFilm: String,
       search: '',
-      formatSet: 'JSON',
+      formatSet: 'application/xml',
     }
   },
   async created() {
@@ -173,20 +173,25 @@ export default {
     },
     async fetchFilms() {
       // const response = await fetch(`/FilmAPIServlet`)
-
       // if (response.status === 200) {
       //   const data = await response.json
-        
       //   const p = Promise.resolve(data);
       //   p.then((v) => {
       //     console.log("All films from fetchFilms", v);
       //   });
-
       //   return p
       // }
+      var data;
 
-      const response = await fetch(`/FilmAPIServlet`)
-      const data = await response.json()
+      if(this.formatSet === "application/json"){
+        data = this.fetchFromJson()
+      }
+      else if(this.formatSet === "application/xml"){
+        data = this.fetchFromXml()
+      } else (
+        //Default
+        data = this.fetchFromJson()
+      )
       return data
     },
     async fetchFilm(id) {
@@ -197,6 +202,25 @@ export default {
     getFilm(id) {
       return this.films.find(film => film.id == id)
     },
+    async fetchFromXml() {
+      const parser = new XMLParser();
+      var output = await fetch(`/FilmAPIServlet`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/xml',
+        },
+      }).then((response) => response.text())
+        .then((data) => (parser.parse(data)["Models.Film-array"]["Models.Film"]))
+
+      console.log("Fetched from XML", output)
+      return output
+    },
+    async fetchFromJson() {
+      const response = await fetch(`/FilmAPIServlet`)
+      const data = await response.json()
+      console.log("Fetched from JSON", data)
+      return data
+    }
   }
 }
 </script>
