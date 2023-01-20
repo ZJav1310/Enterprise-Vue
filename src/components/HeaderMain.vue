@@ -33,18 +33,19 @@
 
     <header class="py-3 mb-3 border-bottom">
         <div class="container-fluid d-grid gap-3 align-items-center" style="grid-template-columns: 1fr 2fr;">
-            <div class="dropdown">
+            
+            <!-- <div class="dropdown">
                 <a href="#"
                     class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-dark text-decoration-none dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="../assets/film-svgrepo-com.png" alt="..." height="36">
-                </a>
-                <ul class="dropdown-menu text-small shadow">
+                </a> -->
+                <!-- <ul class="dropdown-menu text-small shadow">
                     <li><a class="dropdown-item" @click="onClickFormat('application/json')" href="#">JSON</a></li>
                     <li><a class="dropdown-item" @click="onClickFormat('application/xml')" href="#">XML</a></li>
                     <li><a class="dropdown-item" @click="onClickFormat('text/html')" href="#">TEXT</a></li>
-                </ul>
-            </div>
+                </ul> -->
+            <!-- </div> -->
 
             <div class="d-flex align-items-center">
                 <form class="w-100 me-3" role="search">

@@ -8,7 +8,7 @@
       <button @click="requestedFormat('application/xml')">XML</button>
     </div>
 
-    <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
+    <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="films" @click="showModal = true" />
 
 
   </div>
@@ -81,11 +81,12 @@ export default {
   //        then do whatever it is needing to be done? have an array of promised items and then an array
   //        of completed items.
   computed: {
-    filteredList() {
-      return this.films.filter(film => {
-        return film.title.toLowerCase().includes(this.search.toLowerCase())
-      })
-    },
+    // Disabled for now to test, change :films="films" to filteredList
+    // filteredList() {
+    //   return this.films.filter(film => {
+    //     return film.title.toLowerCase().includes(this.search.toLowerCase())
+    //   })
+    // },
   },
   methods: {
     async requestedFormat(format) {
