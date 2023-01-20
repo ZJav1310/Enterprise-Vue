@@ -2,6 +2,7 @@
 
     <h3>{{ formText }}</h3>
     <h5>{{ message }}</h5>
+    {{ id }}
     <form @submit="onSubmit">
         <div class="form-row">
             <div class="col-md-4 mb-3 w-100">
@@ -59,6 +60,7 @@ export default {
                 year: "",
                 stars: "",
                 review: "",
+                id: ""
             }
         } else {
             return {
@@ -67,6 +69,7 @@ export default {
                 year: this.incFilm.year,
                 stars: this.incFilm.stars,
                 review: this.incFilm.review,
+                id: this.incFilm.id
             }
         }
     },
@@ -79,13 +82,26 @@ export default {
                 return;
             }
             //TODO add check for id
-            const formObject = {
-                title: this.title,
-                year: this.year,
-                director: this.director,
-                stars: this.stars,
-                review: this.review,
-            };
+            var formObject;
+
+            if (this.incFilm != null) {
+                formObject = {
+                    title: this.title,
+                    year: this.year,
+                    director: this.director,
+                    stars: this.stars,
+                    review: this.review,
+                    id: this.id
+                }
+            } else {
+                formObject = {
+                    title: this.title,
+                    year: this.year,
+                    director: this.director,
+                    stars: this.stars,
+                    review: this.review,
+                };
+            }
 
             this.$emit("form-object", formObject);
 

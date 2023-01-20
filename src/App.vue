@@ -1,10 +1,12 @@
 <template>
+
   <div class="container">
-    <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search"/>
-    <div>
-      <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
-    </div>
+    <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
+
+    <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
   </div>
+
+
   <!-- Modal that will contain the form, this can be changed to a component -->
   <div v-if="showModal">
     <!-- Modal for forms -->
@@ -40,6 +42,9 @@
 import Header from "./components/HeaderMain.vue";
 import Films from "./components/FilmsComponent.vue";
 import FormComponent from "./components/FormComponent.vue";
+
+// const { XMLParser, XMLBuilder } = require("fast-xml-parser");
+
 export default {
   name: 'App',
   components: {
@@ -58,6 +63,7 @@ export default {
       id: '',
       incFilm: String,
       search: '',
+      formatSet: 'JSON',
     }
   },
   async created() {
@@ -74,21 +80,12 @@ export default {
       })
     },
   },
-  // watch: {
-  //   search(newSearch) {
-  //     console.log("new search:", newSearch)
-  //     this.filter = this.films.filter(film => {
-  //       return film.title.toLowerCase().includes(newSearch.toLowerCase())
-  //     })
-
-  //     console.log(this.filter)
-  //   },
-  // }, 
-  mounted(){
-    this.fetchFilms()
-  },
+  // mounted() {
+  //   this.fetchFilms()
+  // },
   methods: {
     requestedFormat(format) {
+      this.formatSet = format
       console.log(format)
     },
     toggleModal() {
@@ -108,9 +105,8 @@ export default {
       this.showModal = true
       this.id = id
       this.incFilm = this.getFilm(this.id)
-
-      console.log(this.id)
-      console.log("incoming film in toggleUpdate:", this.incFilm)
+      //console.log(this.id)
+      //console.log("incoming film in toggleUpdate:", this.incFilm)
     },
     async deleteFilm(id) {
       console.log(id)
@@ -118,14 +114,17 @@ export default {
         const response = await fetch(`/FilmAPIServlet?id=${id}`, {
           method: 'DELETE',
         })
-
         response.status === 200 ?
           (this.films = this.films.filter((film) => film.id !== id)) :
           alert('Error deleting film')
-
       }
     },
     async updateFilm(film) {
+      // var x = this.builderXml(film)
+      // var y = this.parseXml(x)
+
+      // console.log(y)
+      // film = y
       const response = await fetch(`/FilmAPIServlet`, {
         method: 'PUT',
         headers: {
@@ -133,12 +132,14 @@ export default {
         },
         body: JSON.stringify(film)
       })
+
       const data = await response.json()
+      console.log("check", data)
+
       if (response.status === 200) {
         this.films = this.films.filter((film) => film.id !== this.id)
-        this.films = [...this.films, data]
+        this.films = [...this.films, film]
         console.log("Updated film in UpdateFilm:", film)
-
         // this.incFilm = null
       } else {
         alert('Error Adding Film')
@@ -155,15 +156,35 @@ export default {
       })
 
       const data = await response.json()
-      
+
+      const p = Promise.resolve(data);
+      p.then((v) => {
+        console.log("-addfilm-", v);
+      });
+      console.log("what is this in add film", p)
+
       if (response.status === 201) {
-        this.films = [...this.films, data]
+        // this.films = [...this.films, film]
+        this.films = [...this.films, film]
       } else {
         alert('Error Adding Film')
       }
 
     },
     async fetchFilms() {
+      // const response = await fetch(`/FilmAPIServlet`)
+
+      // if (response.status === 200) {
+      //   const data = await response.json
+        
+      //   const p = Promise.resolve(data);
+      //   p.then((v) => {
+      //     console.log("All films from fetchFilms", v);
+      //   });
+
+      //   return p
+      // }
+
       const response = await fetch(`/FilmAPIServlet`)
       const data = await response.json()
       return data

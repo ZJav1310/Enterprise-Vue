@@ -40,9 +40,9 @@
                     <img src="../assets/film-svgrepo-com.png" alt="..." height="36">
                 </a>
                 <ul class="dropdown-menu text-small shadow">
-                    <li><a class="dropdown-item" @click="onClickFormat('JSON')" href="#">JSON</a></li>
-                    <li><a class="dropdown-item" @click="onClickFormat('XML')" href="#">XML</a></li>
-                    <li><a class="dropdown-item" @click="onClickFormat('TEXT')" href="#">TEXT</a></li>
+                    <li><a class="dropdown-item" @click="onClickFormat('application/json')" href="#">JSON</a></li>
+                    <li><a class="dropdown-item" @click="onClickFormat('application/xml')" href="#">XML</a></li>
+                    <li><a class="dropdown-item" @click="onClickFormat('text/html')" href="#">TEXT</a></li>
                 </ul>
             </div>
 
