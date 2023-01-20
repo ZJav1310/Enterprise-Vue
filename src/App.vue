@@ -2,8 +2,15 @@
 
   <div class="container">
     <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
+    
+    <div>
+      <button @click="requestedFormat('application/json')">JSON</button>
+      <button @click="requestedFormat('application/xml')">XML</button>
+    </div>
 
     <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
+
+
   </div>
 
 
@@ -63,7 +70,7 @@ export default {
       id: '',
       incFilm: String,
       search: '',
-      formatSet: 'application/xml',
+      formatSet: '',
     }
   },
   async created() {
@@ -80,12 +87,10 @@ export default {
       })
     },
   },
-  // mounted() {
-  //   this.fetchFilms()
-  // },
   methods: {
-    requestedFormat(format) {
+    async requestedFormat(format) {
       this.formatSet = format
+      this.films = await this.fetchFilms()
       console.log(format)
     },
     toggleModal() {
@@ -220,7 +225,7 @@ export default {
       const data = await response.json()
       console.log("Fetched from JSON", data)
       return data
-    }
+    },
   }
 }
 </script>

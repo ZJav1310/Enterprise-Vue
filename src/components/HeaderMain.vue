@@ -86,7 +86,7 @@ export default {
     },
     methods: {
         onClickFormat(input) {
-            console.log(input)
+            // console.log(input)
             this.$emit['requested-format', input]
         },
     }
