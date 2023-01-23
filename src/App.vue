@@ -1,20 +1,21 @@
 <template>
 
   <div class="container">
-    <div>
-      <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
-    </div>
     
-    <div>
-      <button @click="requestedFormat('application/json')">JSON</button>
-      <button @click="requestedFormat('application/xml')">XML</button>      
-    </div>
-    <div>
-      <button @click="setSearchType('stars')">Stars</button>
-      <button @click="setSearchType('year')">Year</button>
-      <button @click="setSearchType('director')">Director</button>
-    </div>
+    <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
     
+
+    <div class="btn-group p-1" role="group" aria-label="return format">
+      <button type="button" class="btn btn-outline-primary" @click="requestedFormat('application/json')">JSON</button>
+      <button type="button" class="btn btn-outline-primary" @click="requestedFormat('application/xml')">XML</button>
+    </div>
+
+    <div class="btn-group p-1" role="group" aria-label="Search bar format">
+      <button type="button" class="btn btn-primary" @click="setSearchType('title')">Title</button>
+      <button type="button" class="btn btn-primary" @click="setSearchType('stars')">Stars</button>
+      <button type="button" class="btn btn-primary" @click="setSearchType('director')">Director</button>
+    </div>
+
     <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
 
 
@@ -90,20 +91,20 @@ export default {
   computed: {
     filteredList() {
       var filter;
-      if(this.searchRequest === 'title'){
+      if (this.searchRequest === 'title') {
         filter = this.films.filter(film => {
-        return film.title.toLowerCase().includes(this.search.toLowerCase())
-      })
+          return film.title.toLowerCase().includes(this.search.toLowerCase())
+        })
       }
-      if(this.searchRequest === 'stars'){
+      if (this.searchRequest === 'stars') {
         filter = this.films.filter(film => {
-        return film.stars.toLowerCase().includes(this.search.toLowerCase())
-      })
+          return film.stars.toLowerCase().includes(this.search.toLowerCase())
+        })
       }
-      if(this.searchRequest === 'director'){
+      if (this.searchRequest === 'director') {
         filter = this.films.filter(film => {
-        return film.director.toLowerCase().includes(this.search.toLowerCase())
-      })
+          return film.director.toLowerCase().includes(this.search.toLowerCase())
+        })
       }
       return filter
     },
@@ -133,6 +134,10 @@ export default {
       this.incFilm = this.getFilm(this.id)
       //console.log(this.id)
       //console.log("incoming film in toggleUpdate:", this.incFilm)
+    },
+    setSearchType(input) {
+      this.searchRequest = input
+      console.log("Search type", input)
     },
     async deleteFilm(id) {
       console.log(id)
@@ -209,10 +214,10 @@ export default {
       // }
       var data;
 
-      if(this.formatSet === "application/json"){
+      if (this.formatSet === "application/json") {
         data = this.fetchFromJson()
       }
-      else if(this.formatSet === "application/xml"){
+      else if (this.formatSet === "application/xml") {
         data = this.fetchFromXml()
       } else (
         //Default
@@ -246,10 +251,6 @@ export default {
       const data = await response.json()
       console.log("Fetched from JSON", data)
       return data
-    },
-    setSearchType(input){
-      this.searchRequest = input
-      console.log("Search type", input)
     },
   }
 }

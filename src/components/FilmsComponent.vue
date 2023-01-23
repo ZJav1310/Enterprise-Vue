@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <button @click="pagination('down')">page down</button>
-        <button @click="pagination('up')">page up</button>  
+    <div class="btn-group p-1" role="group" aria-label="Page">
+        <button type="button" class="btn btn-outline-primary" @click="pagination('down')">page down</button>
+        <button type="button" class="btn btn-outline-primary" @click="pagination('up')">page up</button>    
     </div>
     <!-- <div v-for="(film) in films" :key="film.id">
         <div>
