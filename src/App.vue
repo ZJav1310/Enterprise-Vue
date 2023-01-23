@@ -1,18 +1,24 @@
 <template>
 
   <div class="container">
-    <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
+    <div>
+      <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
+    </div>
     
     <div>
       <button @click="requestedFormat('application/json')">JSON</button>
-      <button @click="requestedFormat('application/xml')">XML</button>
+      <button @click="requestedFormat('application/xml')">XML</button>      
     </div>
-
-    <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="films" @click="showModal = true" />
+    <div>
+      <button @click="setSearchType('stars')">Stars</button>
+      <button @click="setSearchType('year')">Year</button>
+      <button @click="setSearchType('director')">Director</button>
+    </div>
+    
+    <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
 
 
   </div>
-
 
   <!-- Modal that will contain the form, this can be changed to a component -->
   <div v-if="showModal">
@@ -71,6 +77,7 @@ export default {
       incFilm: String,
       search: '',
       formatSet: '',
+      searchRequest: 'title',
     }
   },
   async created() {
@@ -81,12 +88,25 @@ export default {
   //        then do whatever it is needing to be done? have an array of promised items and then an array
   //        of completed items.
   computed: {
-    // Disabled for now to test, change :films="films" to filteredList
-    // filteredList() {
-    //   return this.films.filter(film => {
-    //     return film.title.toLowerCase().includes(this.search.toLowerCase())
-    //   })
-    // },
+    filteredList() {
+      var filter;
+      if(this.searchRequest === 'title'){
+        filter = this.films.filter(film => {
+        return film.title.toLowerCase().includes(this.search.toLowerCase())
+      })
+      }
+      if(this.searchRequest === 'stars'){
+        filter = this.films.filter(film => {
+        return film.stars.toLowerCase().includes(this.search.toLowerCase())
+      })
+      }
+      if(this.searchRequest === 'director'){
+        filter = this.films.filter(film => {
+        return film.director.toLowerCase().includes(this.search.toLowerCase())
+      })
+      }
+      return filter
+    },
   },
   methods: {
     async requestedFormat(format) {
@@ -226,6 +246,10 @@ export default {
       const data = await response.json()
       console.log("Fetched from JSON", data)
       return data
+    },
+    setSearchType(input){
+      this.searchRequest = input
+      console.log("Search type", input)
     },
   }
 }

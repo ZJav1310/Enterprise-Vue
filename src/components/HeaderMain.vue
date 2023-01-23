@@ -50,7 +50,7 @@
             <div class="d-flex align-items-center">
                 <form class="w-100 me-3" role="search">
                     <div>
-                        <input placeholder="Search title.." class="form-control" type="text" :value="searchBar" @input="$emit('update:searchBar', $event.target.value)"/>
+                        <input placeholder="Search..." class="form-control" type="text" :value="searchBar" @input="$emit('update:searchBar', $event.target.value)"/>
                     </div>
                 </form>
                 <!-- {{ searchText }} -->
