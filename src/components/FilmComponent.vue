@@ -1,13 +1,19 @@
 <template>
-    <div class="film">
-        <h3>{{ film.title }}</h3>
-        <p>{{ film.year }} / {{ film.director }} / {{ film.stars }}</p>
-        <p>{{ film.review }}</p>
+    <div class="card bg-light mb-3">
+        <h5 class="card-header">
+            {{ film.title }}
+        </h5>
+        <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">{{ film.year }} / {{ film.director }} / {{ film.stars }}</h6>
+        <p class="card-text">{{ film.review }}</p>
+
         <div>
             <ButtonComponent @click="onUpdate(film.id)" text="Update" data-toggle="modal" data-target="#modalComp"/>
             <ButtonComponent @click="onDelete(film.id)" text="Delete" />
         </div>
     </div>
+    </div>
+    
 </template>
 
 <script>
@@ -30,7 +36,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<!-- <style scoped>
 .film {
     background: rgb(230, 230, 230);
     margin: 5px;
@@ -43,5 +49,5 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-</style>
+} -->
+<!-- </style> -->

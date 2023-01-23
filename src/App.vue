@@ -1,9 +1,9 @@
 <template>
 
   <div class="container">
-    
+
     <Header @toggle-insert="toggleInsert" title='Film' :showAdd="showAdd" v-model:search-bar="search" />
-    
+
 
     <div class="btn-group p-1" role="group" aria-label="return format">
       <button type="button" class="btn btn-outline-primary" @click="requestedFormat('application/json')">JSON</button>
@@ -15,10 +15,9 @@
       <button type="button" class="btn btn-primary" @click="setSearchType('stars')">Stars</button>
       <button type="button" class="btn btn-primary" @click="setSearchType('director')">Director</button>
     </div>
-
-    <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
-
-
+    <div>
+      <Films @toggle-update="toggleUpdate" @delete-film="deleteFilm" :films="filteredList" @click="showModal = true" />
+    </div>
   </div>
 
   <!-- Modal that will contain the form, this can be changed to a component -->

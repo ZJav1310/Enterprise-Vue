@@ -1,8 +1,9 @@
 <template>
-    <div class="btn-group p-1" role="group" aria-label="Page">
+    <div class="btn-group p-1 pb-2" role="group" aria-label="Page">
         <button type="button" class="btn btn-outline-primary" @click="pagination('down')">page down</button>
-        <button type="button" class="btn btn-outline-primary" @click="pagination('up')">page up</button>    
+        <button type="button" class="btn btn-outline-primary" @click="pagination('up')">page up</button>       
     </div>
+    Page {{ page + 1 }} out of {{ Math.round(films.length / perPage)}}
     <!-- <div v-for="(film) in films" :key="film.id">
         <div>
             <Film @delete-film="$emit('delete-film', film.id)" @toggle-update="$emit('toggle-update', film.id)"
@@ -22,7 +23,7 @@
         </div>
     </div> -->
 
-    <div v-for="(film) in filteredItems" :key="film.id">
+    <div class="mt-1" v-for="(film) in filteredItems" :key="film.id">
         <div>
             <Film 
                 @delete-film="$emit('delete-film', film.id)" 
