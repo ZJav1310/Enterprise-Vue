@@ -138,6 +138,9 @@ export default {
       this.searchRequest = input
       console.log("Search type", input)
     },
+    reloadPage() {
+      window.location.reload();
+    },
     async deleteFilm(id) {
       console.log(id)
       if (confirm('Are you sure?')) {
@@ -168,7 +171,8 @@ export default {
 
       if (response.status === 200) {
         this.films = this.films.filter((film) => film.id !== this.id)
-        this.films = [...this.films, film]
+        // this.films = [...this.films, film]
+        this.films = [film, ...this.films]
         console.log("Updated film in UpdateFilm:", film)
         // this.incFilm = null
       } else {
@@ -194,8 +198,11 @@ export default {
       console.log("what is this in add film", p)
 
       if (response.status === 201) {
-        // this.films = [...this.films, film]
         this.films = [...this.films, film]
+
+        // Need to force refresh to return the new id of this record
+        this.reloadPage()
+        alert('Film added')
       } else {
         alert('Error Adding Film')
       }
